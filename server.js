@@ -24,13 +24,18 @@ app.use(
 
 app.use(express.json());
 
-//database connection
+// Database connection
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log("mongodb is connected"))
+  .then(() => console.log("MongoDB is connected"))
   .catch((e) => console.log(e));
 
-//routes configuration
+// Define a root route
+app.get("/", (req, res) => {
+  res.send("Welcome to the API!");
+});
+
+// Routes configuration
 app.use("/auth", authRoutes);
 app.use("/media", mediaRoutes);
 app.use("/instructor/course", instructorCourseRoutes);
@@ -39,6 +44,7 @@ app.use("/student/order", studentViewOrderRoutes);
 app.use("/student/courses-bought", studentCoursesRoutes);
 app.use("/student/course-progress", studentCourseProgressRoutes);
 
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.log(err.stack);
   res.status(500).json({
@@ -47,6 +53,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is now running on port ${PORT}`);
 });
